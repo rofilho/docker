@@ -16,7 +16,7 @@ app = Flask(__name__)
 num_acessos = Value("i", 0)
 num_acessos_simultaneos = Value("i", 0)
 
-# Definir rota para página inicial
+# Rota para página inicial
 @app.route("/")
 def informacoes_container():
     with num_acessos.get_lock():
@@ -85,13 +85,6 @@ def informacoes_container():
                     color: #333;
                     transition: background 0.5s ease-in-out;
                 }}
-                #header-container {{
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    padding: 1rem;
-                    width: 100%;
-                }}
                 header {{
                     background-color: rgba(70, 130, 180, 0.8);
                     text-align: center;
@@ -99,9 +92,10 @@ def informacoes_container():
                     font-size: 2rem;
                     margin-bottom: 20px;
                     flex: 1;
+                    width: 100%;
                 }}
                 #access-info {{
-                    background-color: rgba(70, 130, 180, 1);
+                    background-color: {cor};
                     padding: 1rem;
                     border-radius: 10px;
                     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -168,11 +162,9 @@ def informacoes_container():
             </style>
         </head>
         <body>
-            <div id="header-container">
-                <header>
-                    <h1>Informações do Contêiner</h1>
-                </header>
-            </div>
+            <header>
+                <h1>Informações do Contêiner</h1>
+            </header>
             <div id="access-info">
                 <p>Acessos: {num_acessos.value}</p>
                 <p>Acessos Simultâneos: {acessos_simultaneos}</p>
@@ -211,6 +203,20 @@ def informacoes_container():
             <footer>
                 © 2024 Informações do Contêiner
             </footer>
+            <script>
+                // Função para atualizar a cor de fundo da página
+                function atualizarCorFundo() {{
+                    fetch("/cor_de_fundo")
+                        .then(response => response.json())
+                        .then(data => {{
+                            document.body.style.background = `linear-gradient(135deg, {cor}, #8FBC8F)`;
+
+                        }})
+                        .catch(error => console.error("Erro ao obter a cor de fundo:", error));
+                }}
+                // Atualizar a cor de fundo ao carregar a página
+                atualizarCorFundo();
+            </script>
         </body>
         </html>
     """
